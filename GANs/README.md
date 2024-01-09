@@ -24,7 +24,7 @@
 - 위 과정이 끝나면 $p_{z}(z)$에서 $m$개의 Noise를 샘플링하여 Minibatch를 구성하고 SGD를 사용해 $G$를 업데이트합니다.
 ## 4.1) Global Optimiality of $p_{g} = p_{\text{data}}$
 - $G$가 고정되어 있을 때, Optimal $D$는 다음과 같음을 증명합니다.
-$$D^{\ast}_G(x) = \frac{p_{\text{data}}(x)}{p_{\text{data}}(x) + p_{g}(x)}$$
+$$D^{\ast}_{G}(x) = \frac{p_{\text{data}}(x)}{p_{\text{data}}(x) + p_{g}(x)}$$
 $$V(G, D) = \int_{x}p_{\text{data}}(x)log(D(x))dx + \int_{z}p_{z}(z)log(1 - D(G(z))dz$$
 - 그런데 $z \sim p_{z}(z)$인 $z$에 대해 $x \sim p_{g}(G(z))$이므로
 $$V(G, D) = \int_{x}\big(p_{\text{data}}(x)log(D(x)) + p_{g}(x)log(1 - D(x)\big)dx$$
