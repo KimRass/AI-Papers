@@ -11,24 +11,24 @@
 - Discriminative model that outputs single scalar $\theta_{d}$ $D$
 - Input noise의 분포 $p_z(z)$
 - $G$에 의한 Mapping from input noise to data space $G(z; \theta_{g})$
-- Data distribution $p_{data}(x)$
+- Data distribution $p_{\text{data}}(x)$
 - Generative model distribution $p_{g}(x)$
 - Eq. (1):
-    $$\min_{G}\max_{D}V(D, G) = \mathbb{E}_{x \sim p_{data}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_{z}(z)}[\log(1 - D(G(z)))]$$
-    - $D$는 Real data distribution $p_{data}(x)$에서 샘플링된 Data $x$에 대해서는 output이 최대값 1에 가까워지도록 (첫 번째 term이 0에 가까워지도록) 그리고 $p_{z}(z)$에서 샘플링된 Input noise $z$를 가지고 $G$가 생성한 Data에 대해서는 Output이 최소값 0에 가까워지도록 (두 번째 Term이 0에 가까워지도록) 학습됩니다.
+    $$\min_{G}\max_{D}V(D, G) = \mathbb{E}_{x \sim p_{\text{data}}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_{z}(z)}[\log(1 - D(G(z)))]$$
+    - $D$는 Real data distribution $p_{\text{data}}(x)$에서 샘플링된 Data $x$에 대해서는 output이 최대값 1에 가까워지도록 (첫 번째 term이 0에 가까워지도록) 그리고 $p_{z}(z)$에서 샘플링된 Input noise $z$를 가지고 $G$가 생성한 Data에 대해서는 Output이 최소값 0에 가까워지도록 (두 번째 Term이 0에 가까워지도록) 학습됩니다.
     - $G$는 $p_{z}(z)$에서 샘플링된 Input noise $z$에 대한 Output이 $D$에 Input으로 들어갔을 때의 Output($D(G(z))$)이 1에 가까워지도록 (두 번째 Term이 $-\infty$에 가까워지도록) 학습됩니다.
 
 # 4. Theroretical Results
 - $G$를 한 번 학습시킬 동안 $D$를 학습시킬 횟수 $k$는 Hyperparameter인데 이 논문에서는 $k = 1$을 사용합니다.
-- $k$번의 스텝 동안 $p_{z}(z)$에서 $m$개의 Noise를 샘플링하여 Minibatch를 구성하고 $p_{data}(x)$에서 마찬가지로 $m$개의 Noise를 샘플링하여 Minibatch를 구성합니다. SGD를 사용해 $D$를 업데이트합니다.
+- $k$번의 스텝 동안 $p_{z}(z)$에서 $m$개의 Noise를 샘플링하여 Minibatch를 구성하고 $p_{\text{data}}(x)$에서 마찬가지로 $m$개의 Noise를 샘플링하여 Minibatch를 구성합니다. SGD를 사용해 $D$를 업데이트합니다.
 - 위 과정이 끝나면 $p_{z}(z)$에서 $m$개의 Noise를 샘플링하여 Minibatch를 구성하고 SGD를 사용해 $G$를 업데이트합니다.
-## 4.1) Global Optimiality of $p_{g} = p_{data}$
+## 4.1) Global Optimiality of $p_{g} = p_{\text{data}}$
 - $G$가 고정되어 있을 때, Optimal $D$는 다음과 같음을 증명합니다.
-$$D^{*}_G(x) = \frac{p_{data}(x)}{p_{data}(x) + p_{g}(x)}$$
-$$V(G, D) = \int_{x}p_{data}(x)log(D(x))dx + \int_{z}p_{z}(z)log(1 - D(G(z))dz$$
-- 그런데 $z \sim p_{z}(z)$인 $z$에 대해 $x \sim p_{G}(G(z))$이므로
-$$V(G, D) = \int_{x}\big(p_{data}(x)log(D(x)) + p_{g}(x)log(1 - D(x)\big)dx$$
-- $G$와 $D$가 충분한 Capacity를 갖추고 있고 $G$가 고정되어 있을 때 $V(D, G)$를 최대화하는 $D$는 $p_{g} = p_{data}$일 때 가능합니다. 즉 'Algorithm 1'에서 매 스텝마다 $D$를 학습시킬 때 $G$를 고정한다면 $k$번의 스텝 동안 $D$를 학습시키면서 $p_{g}$는 $p_{data}$로 수렴합니다.(?)
+$$D^{\ast}_G(x) = \frac{p_{\text{data}}(x)}{p_{\text{data}}(x) + p_{g}(x)}$$
+$$V(G, D) = \int_{x}p_{\text{data}}(x)log(D(x))dx + \int_{z}p_{z}(z)log(1 - D(G(z))dz$$
+- 그런데 $z \sim p_{z}(z)$인 $z$에 대해 $x \sim p_{g}(G(z))$이므로
+$$V(G, D) = \int_{x}\big(p_{\text{data}}(x)log(D(x)) + p_{g}(x)log(1 - D(x)\big)dx$$
+- $G$와 $D$가 충분한 Capacity를 갖추고 있고 $G$가 고정되어 있을 때 $V(D, G)$를 최대화하는 $D$는 $p_{g} = p_{\text{data}}$일 때 가능합니다. 즉 'Algorithm 1'에서 매 스텝마다 $D$를 학습시킬 때 $G$를 고정한다면 $k$번의 스텝 동안 $D$를 학습시키면서 $p_{g}$는 $p_{\text{data}}$로 수렴합니다.(?)
 ## 4.2) Convergence of Algorithm 1
 - 내용을 잘 이해하지 못했습니다.
 
