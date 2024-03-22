@@ -1,4 +1,4 @@
-# 1. Image Generative AI
+<!-- # 1. Image Generative AI
 ## 1) VAE
 - [Auto Encoding Variational Bayes](https://github.com/KimRass/VAE/tree/main/papers/VAE)
 ## 2) GANs
@@ -8,4 +8,12 @@
 ## 4) StarGAN
 - [StarGAN: Unified Generative Adversarial Networks for Multi-Domain Image-to-Image Translation](https://github.com/KimRass/StarGAN/tree/main/papers/StarGAN)
 ## 5) DDPM
-- [Denoising Diffusion Probabilistic Models](https://github.com/KimRass/DDPM/tree/main/papers/DDPM)
+- [Denoising Diffusion Probabilistic Models](https://github.com/KimRass/DDPM/tree/main/papers/DDPM) -->
+
+||||
+|:-:|:-:|:-:|
+| Vision |
+| 2014 | GAN | Goodfellow et al. |
+| 2016 | Context Encoder | Pathak et al. |
+| 2022 | BEiT | Bao et al. |
+| 2022 | Flamingo | Alayrac et al. |
