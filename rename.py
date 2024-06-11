@@ -4,11 +4,15 @@ import re
 
 def rename(trg_dir):
     for old_path in Path(trg_dir).glob("**/*.pdf"):
+        # old_path = Path("/Users/kimjongbeom/Documents/workspace/AI-Papers/vision/deformable_convnets_v2:_more_deformable,_better_results.pdf")
         old_name = old_path.name
         new_name = old_name.lower()
         new_name = re.sub(r"[ -]", "_", new_name)
         new_name = re.sub(r"[\r\n]+", "_", new_name)
         new_name = re.sub(r"_+", "_", new_name)
+        new_name = re.sub(r", ", "_", new_name)
+        new_name = re.sub(r",_", "_", new_name)
+        new_name = re.sub(r":_|: |:", "_", new_name)
 
         if new_name != old_name:
             print(f"'{old_name}'\n -> '{new_name}'")
