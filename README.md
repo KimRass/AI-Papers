@@ -32,3 +32,4 @@
 | 2022 | [OneFormer](https://github.com/KimRass/AI-Papers/blob/main/segmentation/oneformer_one_transformer_to_rule_universal_image_segmentation.pdf) | OneFormer: One Transformer to Rule Universal Image Segmentation | Jain et al. | - Transformer |
 | Diffusion probabilistic models |
 | 2023 | [ControlNet](https://github.com/KimRass/AI-Papers/blob/main/dpms/adding_conditional_control_to_text_to_Image_diffusion_models.pdf) | Adding Conditional Control to Text-to-Image Diffusion Models | Zhang et al. | - Transformer<br>- Diffusion |
+| Super-resolution |
