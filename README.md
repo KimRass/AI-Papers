@@ -1,35 +1,29 @@
-<!-- # 1. Image Generative AI
-## 1) VAE
-- [Auto Encoding Variational Bayes](https://github.com/KimRass/VAE/tree/main/papers/VAE)
-## 2) GANs
-- [Generative Adversarial Nets](https://github.com/KimRass/AI-Paper-Reviews/tree/main/GANs)
-## 3) Pix2Pix
-- [Image-to-Image Translation with Conditional Adversarial Networks](https://github.com/KimRass/Pix2Pix/blob/main/papers/Pix2Pix)
-## 4) StarGAN
-- [StarGAN: Unified Generative Adversarial Networks for Multi-Domain Image-to-Image Translation](https://github.com/KimRass/StarGAN/tree/main/papers/StarGAN)
-## 5) DDPM
-- [Denoising Diffusion Probabilistic Models](https://github.com/KimRass/DDPM/tree/main/papers/DDPM) -->
-
-<!-- ||||
-|:-:|:-:|:-:|
-| Vision |
-| 2014 | GAN | Goodfellow et al. |
-| 2016 | Context Encoder | Pathak et al. |
-| 2022 | BEiT | Bao et al. |
-| 2022 | Flamingo | Alayrac et al. | -->
-
 ||||||
 |:-:|:-|:-|:-|:-|
-| Vision-language models |
-| 2021 | [ALIGN](https://github.com/KimRass/AI-Papers/blob/main/vlms/scaling_up_visual_and_vision_language_representation_learning%0D_with_noisy_text_supervision.pdf) | Scaling Up Visual and Vision-Language Representation Learning with Noisy Text Supervision | Jia et al. | - Noisy image-text data<br>- Constrative learning |
-| 2022 | [Flamingo](https://github.com/KimRass/AI-Papers/blob/main/vlms/flamingo_a_visual_language_model_for_few_shot_learning.pdf) | Flamingo: a Visual Language Model for Few-Shot Learning | Alayrac et al. | - Transformer |
-|| [CoCa](https://github.com/KimRass/AI-Papers/blob/main/vlms/coca_contrastive_captioners_are_image_text_foundation_models.pdf) | CoCa: Contrastive Captioners are Image-Text Foundation Models | Yu et al. | - Transformer |
-| Vision transformers |
-| 2021 | [MViT](https://github.com/KimRass/AI-Papers/blob/main/vits/multiscale_vision_transformers.pdf) | Multiscale Vision Transformers | Fan et al. | - Transformer |
-| Visual representation learning |
-| 2022 | [BEiT](https://github.com/KimRass/AI-Papers/blob/main/visual_representation_learning/beit_bert_pretraining_of_image_transformers.pdf) | BEiT: BERT Pre-Training of Image Transformers | Bao et al. | - Transformer |
-| Segmentation |
-| 2022 | [OneFormer](https://github.com/KimRass/AI-Papers/blob/main/segmentation/oneformer_one_transformer_to_rule_universal_image_segmentation.pdf) | OneFormer: One Transformer to Rule Universal Image Segmentation | Jain et al. | - Transformer |
-| Diffusion probabilistic models |
-| 2023 | [ControlNet](https://github.com/KimRass/AI-Papers/blob/main/dpms/adding_conditional_control_to_text_to_Image_diffusion_models.pdf) | Adding Conditional Control to Text-to-Image Diffusion Models | Zhang et al. | - Transformer<br>- Diffusion |
-| Super-resolution |
+| Vision |
+| | | Feature Perceptual Loss for Variational Autoencoder | - Autoencoder<br>- Loss function |
+| | Context Encoder | Context Encoders: Feature Learning by Inpainting | - Self-supervised vision representation learning<br>- Image inpainting |
+| | | Fixing the train-test resolution discrepancy | |
+| | GANs | Generative Adversarial Nets | - GANs |
+| | ImageGPT | Generative Pretraining from Pixels | - Self-supervised vision representation learning |
+| | | Deformable ConvNets v2: More Deformable, Better Results | - CNN |
+| | | Deformable Convolutional Networks | - CNN |
+| 2023 | ControlNet | Adding Conditional Control to Text-to-Image Diffusion Models | - Transformer<br>- Diffusion |
+| | | Image Super-resolution Via Latent Diffusion: A Sampling-space Mixture Of Experts And Frequency-augmented Decoder Approach | - ISR |
+| | Video LDM | Align your Latents: High-Resolution Video Synthesis with Latent Diffusion Models | - Video generation |
+| | BasicVSR | BasicVSR: The Search for Essential Components in Video Super-Resolution and Beyond | - VSR |
+| | BasicVSR++ | BasicVSR++: Improving Video Super-Resolution with Enhanced Propagation and Alignment | - VSR |
+| | BEIT | BEIT: BERT Pre-Training of Image Transformers | - Self-supervised vision representation learning |
+| | VQ-VAE-2 | Generating Diverse High-Fidelity Images with VQ-VAE-2 | - Image generation<br>- GANs |
+| | | Blind Super-Resolution Kernel Estimation using an Internal-GAN | - ISR<br>- GANs |
+| | CDM | Cascaded Diffusion Models for High Fidelity Image Generation | - Image generation |
+| | | Consistency Models | - Image generation |
+| | SR3+ | Denoising Diffusion Probabilistic Models for Robust Image Super-Resolution in the Wild | - ISR |
+| | | Designing a Practical Degradation Model for Deep Blind Image Super-Resolution | - BISR |
+| | DiffBIR | DiffBIR: Towards Blind Image Restoration with Generative Diffusion Prior | - BISR |
+| | DiffiT | DiffiT: Diffusion Vision Transformers for Image Generation | - Image generation<br>- Transformer |
+| | Diffusion Illusion | Diffusion Illusions: Hiding Images in Plain Sight | - Diffusion<br>- Illusion |
+| | Emu | Emu: Enhancing Image Generation Models Using Photogenic Needles in a Haystack - Image generation |
+| | FIFO | FIFO-Diffusion: Generating Infinite Videos from Text without Training | -Text-to-image |
+| Vision-Language |
+| 2022 | Flamingo | Flamingo: a Visual Language Model for Few-Shot Learning | - Transformer |
