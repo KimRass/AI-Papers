@@ -34,6 +34,10 @@
 | | | Designing a Practical Degradation Model for Deep Blind Image Super-Resolution | - BISR |
 | | DiffBIR | DiffBIR: Towards Blind Image Restoration with Generative Diffusion Prior | - BISR |
 | | MoESR | Image Super-resolution Via Latent Diffusion: A Sampling-space Mixture Of Experts And Frequency-augmented Decoder Approach | - ISR<br>- Diffusion |
+| | LIIF | Learning Continuous Image Representation with Local Implicit Image Function | - Continuous super-resolution |
+| | | Implicit Diffusion Models for Continuous Super-Resolution | - Continuous super-resolution |
+| | | Arbitrary-Scale Image Generation and Upsampling using Latent Diffusion
+Model and Implicit Neural Decoder | - Continuous super-resolution |
 | Vision-Language |
 | 2022 | Flamingo | Flamingo: a Visual Language Model for Few-Shot Learning | - Transformer |
 | | VideoGPT | VideoGPT: Video Generation using VQ-VAE and Transformers | |
