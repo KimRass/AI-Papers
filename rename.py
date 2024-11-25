@@ -16,7 +16,7 @@ def rename(trg_dir):
         new_stem = re.sub(r"_+", "_", new_stem)
 
         if new_stem != old_stem:
-            print(f"'{old_stem}'\n -> '{new_stem}'")
+            print(f"'{old_stem}'\n    -> '{new_stem}'")
             old_path.rename((old_path.parent/new_stem).with_suffix(".pdf"))
 
 
