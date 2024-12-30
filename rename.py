@@ -3,6 +3,7 @@ import re
 
 
 def rename(trg_dir):
+    num = 1
     for old_path in Path(trg_dir).glob("**/*.pdf"):
         old_stem = old_path.stem
         
@@ -14,9 +15,13 @@ def rename(trg_dir):
         new_stem = re.sub(r"&", "_", new_stem)
         new_stem = re.sub(r":_|: |:", "_", new_stem)
         new_stem = re.sub(r"_+", "_", new_stem)
+        new_path = (old_path.parent/new_stem).with_suffix(".pdf")
 
         if new_stem != old_stem:
-            print(f"'{old_stem}'\n    -> '{new_stem}'")
+            if new_path.exists():
+                print(f"'{new_stem} already exists!'")
+            print(f"[{num}] '{old_stem}'\n    -> '{new_stem}'")
+            num += 1
             old_path.rename((old_path.parent/new_stem).with_suffix(".pdf"))
 
 
