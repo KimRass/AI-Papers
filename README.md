@@ -44,3 +44,4 @@
 |FixMatch|FixMatch: Simplifying Semi-Supervised Learning with Consistency and Confidence|• Semi-supervised learning|
 |Donut|OCR-free Document Understanding Transformer|• Transformer<br>• VDU|
 |ViTLP|Visually Guided Generative Text-Layout Pre-training for Document Intelligence|• Transformer<br>• Text spotting<br>• VDU|
+|Webvicob|On Web-based Visual Corpus Construction for Visual Document Understanding|• Data collection|
