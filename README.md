@@ -44,4 +44,9 @@
 |FixMatch|FixMatch: Simplifying Semi-Supervised Learning with Consistency and Confidence|• Semi-supervised learning|
 |Donut|OCR-free Document Understanding Transformer|• Transformer<br>• VDU|
 |ViTLP|Visually Guided Generative Text-Layout Pre-training for Document Intelligence|• Transformer<br>• Text spotting<br>• VDU|
-|Webvicob|On Web-based Visual Corpus Construction for Visual Document Understanding|• Data collection|
+|Webvicob|On Web-based Visual Corpus Construction for Visual Document Understanding|• Data collection<br>• Text spotting<br>• VDU|
+|SynthText|Synthetic Data for Text Localisation in Natural Images|• Synthetic data generation<br>• Text spotting|
+|SynthTIGER|SynthTIGER: Synthetic Text Image GEneratoR Towards Better Text Recognition Models|• Synthetic data generation<br>• Text spotting|
+|UnrealText|UnrealText: Synthesizing Realistic Scene Text Images from the Unreal World|• Synthetic data generation<br>• Text spotting|
+|SynthText3D|SynthText3D: Synthesizing Scene Text Images from 3D Virtual Worlds|• Synthetic data generation<br>• Text spotting|
+|VISD|Verisimilar Image Synthesis for Accurate Detection and Recognition of Texts in Scenes|• Synthetic data<br>• Text spotting|
