@@ -50,3 +50,4 @@
 |UnrealText|UnrealText: Synthesizing Realistic Scene Text Images from the Unreal World|• Synthetic data generation<br>• Text spotting|
 |SynthText3D|SynthText3D: Synthesizing Scene Text Images from 3D Virtual Worlds|• Synthetic data generation<br>• Text spotting|
 |VISD|Verisimilar Image Synthesis for Accurate Detection and Recognition of Texts in Scenes|• Synthetic data<br>• Text spotting|
+|LaMa|Resolution-robust Large Mask Inpainting with Fourier Convolutions|• Image inpainting|
