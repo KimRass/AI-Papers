@@ -11,7 +11,7 @@
 
 ## 🎯 핵심 요약
 
-Key Information Extraction(KIE)을 위한 기존 벤치마크들은 OCR 의존, 단일 문서 타입 특화, 이질적인 평가 체계로 인해 LMM의 end-to-end KIE 능력을 체계적으로 평가하기 어렵다. **UniKIE-BENCH**는 스키마 가이드 구조적 예측 방식으로 KIE를 통일하고, 시나리오 predefined 스키마를 사용하는 **Constrained-Category** 트랙(4,472문서, 3도메인, 11시나리오)과 문서별 고유 스키마를 사용하는 **Open-Category** 트랙(1,661문서, 4타입, 2언어)으로 구성된다. 15개 LMM 평가 결과, 현재 SOTA 모델도 다양한 스키마·롱테일 필드·복잡 레이아웃에서 심각한 성능 저하를 보이며, 한국어(중국어)·영어 간 격차와 오픈소스·클로즈드 소스 간 격차가 뚜렷하다.
+Key Information Extraction(KIE)을 위한 기존 벤치마크들은 OCR 의존, 단일 문서 타입 특화, 이질적인 평가 체계로 인해 LMM의 end-to-end KIE 능력을 체계적으로 평가하기 어렵다. **UniKIE-BENCH**는 스키마 가이드 구조적 예측 방식으로 KIE를 통일하고, 시나리오별 predefined 스키마를 사용하는 **Constrained-Category** 트랙(4,472문서, 3도메인, 11시나리오)과 문서별 고유 스키마를 사용하는 **Open-Category** 트랙(1,661문서, 4타입, 2언어)으로 구성된다. 15개 LMM 평가 결과, 현재 SOTA 모델도 다양한 스키마·롱테일 필드·복잡 레이아웃에서 심각한 성능 저하를 보이며, 중국어·영어 간 격차와 오픈소스·클로즈드 소스 간 격차가 뚜렷하다.
 
 ---
 
@@ -22,8 +22,8 @@ Key Information Extraction(KIE)을 위한 기존 벤치마크들은 OCR 의존, 
 LMM이 문서 이미지에서 직접 정보를 추출하는 end-to-end KIE가 주목받고 있지만, 기존 벤치마크들은 세 가지 구조적 한계를 갖는다.
 
 - **OCR 의존** (DocILE, RealKIE): OCR 어노테이션 기반 → LMM의 순수 추출 능력 평가 불가
-- **단일 타입 특화**: 영수증, 청구서 등 특정 문서에만 집중 → 일반화 측정 불가
-- **QA 방식의 비효율**: 필드마다 별도 쿼리를 날리는 방식 → N개 필드면 N번 inference, 필드 간 구조 관계 포착 불가
+- **단일 타입 특화**: 영수증·청구서 등 특정 문서에만 집중 → 일반화 측정 불가
+- **QA 방식의 비효율**: 필드마다 별도 쿼리 → N개 필드면 N번 inference, 필드 간 구조 관계 포착 불가
 
 > **비유**: "이름이 뭐야?", "금액이 얼마야?"를 따로따로 묻는 것과, "이 계약서에서 필요한 모든 항목을 한 번에 채워줘"라고 묻는 것의 차이.
 
@@ -31,56 +31,44 @@ LMM이 문서 이미지에서 직접 정보를 추출하는 end-to-end KIE가 �
 
 *그렇다면 LMM의 실제 KIE 능력을 어떻게 단일 추론으로 측정할까?*
 
-기존 QA 방식과 달리, 스키마 `s = (F, R)`(추출 필드 집합 F + 필드 간 관계 R)를 문서 이미지와 함께 입력해 한 번에 구조화된 출력을 생성하도록 요구한다.
+스키마 `s = (F, R)`(추출 필드 집합 F + 필드 간 관계 R)를 문서 이미지와 함께 입력해 한 번에 구조화된 출력을 생성하도록 요구한다.
 
 ```
 기존 QA:  y_f = M(x, q(f)),  f ∈ F    ← 필드마다 별도 inference
 UniKIE:   y^SG = M(x, s)               ← 스키마 통째로 입력, 단일 inference
 ```
 
-이 방식은 필드 간 의존 관계를 포착하고, 실제 애플리케이션에서 쓰는 방식과 일치한다.
+> **실제 예시** (Figure 1): 인보이스 이미지 + 스키마(`store_name`, `invoice_num`, `billing_to` 등) → `"Athletics Store"`, `"A-2024-INV-0312"` 등을 한 번에 추출.
 
 ### 3단계 — 두 트랙으로 상보적 평가
-
-*시나리오별 특화 능력과 범용 추출 능력을 어떻게 동시에 측정할까?*
 
 | 트랙 | 스키마 방식 | 규모 | 측정 대상 |
 |------|-----------|------|---------|
 | Constrained-Category | 시나리오별 predefined 스키마 | 4,472문서, 11시나리오 | 실용적 application 성능 |
 | Open-Category | 문서별 고유 스키마 | 1,661문서, 영/중 2언어 | 범용 추출 능력 |
 
-Constrained 트랙은 실제 업무(세금신고, 의료기록, 영수증 등)에서 요구되는 정형 스키마로, Open 트랙은 각 문서가 자체 스키마를 갖기 때문에 모델이 처음 보는 필드 유형에도 대응해야 한다.
-
-> **실제 예시** (Figure 1): 인보이스 이미지 + 스키마(`store_name`, `invoice_num`, `billing_to` 등) → 모델이 `"Athletics Store"`, `"A-2024-INV-0312"` 등을 한 번에 추출.
+Constrained 트랙의 데이터 소스는 다양하며, **Postal Label 시나리오는 HW-FORMS(필기체 폼 데이터셋)를 포함**한다 (Appendix A.2, Table 6).
 
 ### 4단계 — 15개 LMM 평가: 격차의 구조
 
-*최신 LMM들은 얼마나 잘 하는가?*
+**Constrained 트랙 최고 성능**: Gemini-3-Pro 82.37, Qwen3-VL-8B(오픈소스) 79.12로 일부 클로즈드 모델 초과.
 
-**Constrained 트랙 최고 성능 (Table 4)**:
-- 클로즈드: Gemini-3-Pro 82.37, Qwen3-VL-Plus 80.20
-- 오픈소스: Qwen3-VL-8B **79.12** (일부 클로즈드 모델 추월)
-- 최하: SmolVLM2-2.2B 23.69
+**Open 트랙**: 모든 모델에서 영어 → 중국어 성능 급락. 한자의 고밀도 구조·단어 경계 부재가 원인.
 
-**Open 트랙 (Table 5)**:
-- 모든 모델에서 영어 → 중국어로 가면 성능 급락
-- 한자의 고밀도 구조·명시적 단어 경계 없음이 시각 인식 어렵게 함
-- Form 문서가 가장 어렵고, Receipt가 가장 쉬움
+문서 타입별 난이도: **Form > Invoice/Contract > Receipt** (Form이 가장 어렵고, Receipt가 가장 쉬움).
 
-**공통 발견**: 스케일만으로 성능 차이 설명 불가 — 같은 크기 모델 간 격차가 크다.
+> **주목할 실패 사례** (Figure 13, Medical Services): 의료 문서의 개인정보 마스킹(redaction) 영역에서 LMM들이 그럴듯하지만 틀린 값을 생성(환각). 보안 처리된 문서에서의 구조적 취약점.
 
-### 5단계 — 오류 분석: 4가지 실패 유형
-
-*왜 성능이 떨어지는가? 어떤 종류의 실수를 하는가?*
+### 5단계 — 오류 분석: 4가지 실패 유형과 내부 메커니즘
 
 | 오류 유형 | 설명 | 실제 예시 |
 |---------|------|---------|
-| **Visual Perception Failure** | 시각 인식 오류 | 세금 필드: 정답 2.32 → 예측 4.32 (숫자 혼동) |
-| **Layout Perception Failure** | 레이아웃 지각 실패 | 주소 필드: 인접한 다른 줄 선택 |
-| **Field Interpretation Error** | 필드 의미 혼동 | net total을 gross amount로 매핑 |
-| **Hallucinated Prediction** | 환각 예측 | 문서에 없는 주소값 생성 |
+| **Visual Perception Failure** | 숫자·문자 혼동 | 세금 2.32 → 예측 4.32 |
+| **Layout Perception Failure** | 인접 줄 혼동 | 주소 필드에 다른 줄 선택 |
+| **Field Interpretation Error** | 필드 의미 혼동 | net total → gross amount 매핑 |
+| **Hallucinated Prediction** | 문서에 없는 값 생성 | 마스킹된 이름 자리에 임의 이름 |
 
-> **핵심 발견**: Faithfulness(문서 내용에 근거)가 높을수록 F1이 높지만, faithfulness가 높아도 F1이 낮은 경우 존재 → 정확한 지각만으로는 충분하지 않고, 필드 경계 구분과 올바른 인스턴스 선택도 필요.
+**Attention 분석** (Appendix A.8, Qwen3-VL-8B): 얕은 레이어는 필드명 레이블에 집중 → 깊은 레이어는 해당 값 위치로 attention 이동. 필드명이 없는 경우 깊은 레이어의 attention이 여러 후보로 분산되어 정확도 저하.
 
 ---
 
@@ -88,21 +76,47 @@ Constrained 트랙은 실제 업무(세금신고, 의료기록, 영수증 등)�
 
 ### 벤치마크 구성
 
-**Constrained-Category KIE Track**:
-- 3 도메인: Business Transactions, Public Services, Regulated Records
-- 11 시나리오: Commercial, Retail, Catering, Accommodation, Administrative, Education, Postal Label, Advertisement, Tax-Compliant, Medical Services, Nutrition Label
-- 데이터 수집: 공개 데이터셋 통합 + 시나리오별 스키마 매핑 + 재어노테이션
+**Constrained-Category KIE Track** (Table 6):
 
-**Open-Category KIE Track**:
-- 4 문서 타입 × 2 언어 (영/중): Receipt, Form, Invoice, Contract
-- 문서 재구성 파이프라인: HTML 코드 생성 → 렌더링 → noise 추가 → OCR로 ground truth 추출
-- 영어 문서가 중국어 대비 복잡한 스키마 (Form/Invoice는 평균 필드 수 15+)
+| 도메인 | 시나리오 | 데이터 소스 | 샘플 수 |
+|------|---------|-----------|-------|
+| Business Transactions | Commercial | SIBR, DocILE | 620 |
+| | Retail | SROIE | 347 |
+| | Catering Services | CORD, CELL | 212 |
+| | Accommodation | SIBR | 40 |
+| Public Services | Administrative | CELL, FUNSD | 385 |
+| | Education | EPHOIE, CELL | 320 |
+| | Postal Label | **HW-FORMS** (필기체) | 500 |
+| | Advertisement | DeepForm | 71 |
+| Regulated Records | Tax-Compliant | Nanonets-KIE | 987 |
+| | Medical Services | SIBR | 240 |
+| | Nutrition Label | POIE | 750 |
 
-### 평가 방식
+**Open-Category KIE Track**: 영/중 × {Receipt, Form, Invoice, Contract} = 8개 조합, 총 1,661문서
+
+### 데이터 생성 파이프라인 (Open-Category)
+
+1. 실제 문서 예시 큐레이션 → GPT-4o로 문서 구조 설명 생성
+2. LLM으로 HTML 생성 → 렌더링 → 문서 이미지
+3. **Blender로 3D 렌더링**: 현실적 조명·접힘·그림자 시뮬레이션
+4. 카메라 촬영 + 모션 블러·가우시안 블러·원근 왜곡 적용
+5. 프린터 아티팩트(잉크 번짐, 드럼 노이즈 등) 추가
+6. OCR → LMM으로 ground truth 키-값 어노테이션
+
+### 어노테이션 지침 (Appendix A.10)
+
+| | Constrained Track | Open Track |
+|---|---|---|
+| 입력 | 문서 이미지 + 시나리오 + predefined 스키마 | 문서 이미지 + OCR 결과 |
+| 작업 | 스키마 필드에 값 채우기 | OCR 교정 → 스키마 직접 설계 |
+| 제약 | 보이는 텍스트에만 근거, 없으면 missing 표기 | 추론·완성·환각 금지 |
+
+### 평가 프로토콜
 
 - **메트릭**: 필드 단위 F1 score (exact match)
-- **구현**: 모든 모델에 통일된 프롬프트 템플릿, temperature=0, 최대 이미지 해상도 1,605,632 픽셀
-- 클로즈드 소스: 공식 API, 오픈소스: vLLM + Flash-Attention
+- **프롬프트** (Figure 7): "JSON 스키마의 빈칸을 이미지 정보로 채워라. 출력은 valid JSON만"
+- temperature=0, 최대 해상도 1,605,632픽셀
+- 오픈소스: vLLM + Flash-Attention, NVIDIA A100 GPU × 2
 
 ---
 
@@ -115,19 +129,23 @@ Constrained 트랙은 실제 업무(세금신고, 의료기록, 영수증 등)�
 | Gemini-3-Pro | 82.37 | 클로즈드 최강 |
 | Qwen3-VL-Plus | 80.20 | |
 | Qwen-VL-Max | 77.77 | |
-| **Qwen3-VL-8B** | **79.12** | 오픈소스 최강, 일부 클로즈드 초과 |
+| GPT-4o | 69.15 | |
+| Claude-Sonnet-4.5 | 66.39 | |
+| **Qwen3-VL-8B** | **79.12** | **오픈소스 최강, Qwen-VL-Max 초과** |
 | MiMo-VL-7B-RL | 68.88 | |
 | InternVL3.5-8B | 67.70 | |
+| MiniCPM-V4.5-8B | 67.15 | |
 | SmolVLM2-2.2B | 23.69 | 최하 |
 
 ### Open-Category (Table 5, 평균 F1)
 
-| 모델 | 평균 | 중국어 Avg | 영어 Avg |
-|------|------|----------|---------|
+| 모델 | 전체 평균 | 중국어 평균 | 영어 평균 |
+|------|---------|----------|---------|
 | Gemini-3-Pro | 81.65 | 75.96 | 87.06 |
 | Qwen3-VL-Plus | 70.61 | 70.95 | 73.45 |
 | **Qwen3-VL-8B** | **67.36** | 64.95 | 67.34 |
-| MiniCPM-V4.5-8B | 52.60 | 39.46 | 56.44 |
+| Kimi-VL-A3B | 58.56 | 53.65 | 64.27 |
+| InternVL3.5-8B | 49.38 | 39.43 | 50.06 |
 | SmolVLM2-2.2B | 12.83 | 4.10 | 22.36 |
 
 ### 기존 KIE 벤치마크 비교 (Table 3)
@@ -143,11 +161,13 @@ Constrained 트랙은 실제 업무(세금신고, 의료기록, 영수증 등)�
 
 ## 💡 주요 인사이트
 
-1. **스키마 다양성이 가장 큰 도전**: 롱테일 필드, 다양한 스키마 정의 시 성능 급락 → 단순 스케일업으로 해결 불가
-2. **레이아웃 이해가 병목**: 텍스트 인식은 되어도 올바른 공간적 매핑 실패가 많음
-3. **한중 언어 격차 구조적**: 중국어 고밀도 자소 구조 + 단어 경계 부재 → 시각적 인식 자체가 더 어려움
-4. **Faithfulness ≠ 정확도**: 문서 내 근거를 찾더라도 필드 경계와 올바른 인스턴스 선택이 별도 능력
-5. **오픈소스 Qwen3-VL-8B의 선전**: 일부 클로즈드 모델을 초과 — 아키텍처·학습 전략이 스케일보다 중요
+1. **스키마 다양성이 가장 큰 도전**: 롱테일 필드·다양한 스키마 시 성능 급락 — 단순 스케일업으로 해결 불가
+2. **필기체 포함**: Postal Label 시나리오(HW-FORMS)로 인쇄체에 편중된 기존 벤치마크의 한계를 보완
+3. **레이아웃 이해가 병목**: Form 문서의 체크박스·셀렉션 필드, Advertisement의 복잡한 표 레이아웃에서 LMM이 특히 취약
+4. **중국어 문서 구조적 열세**: 고밀도 자소·단어 경계 부재 → 시각 인식 자체가 더 어렵고, 영문 중심 사전학습 데이터 불균형
+5. **Privacy redaction = 환각 트리거**: 마스킹된 필드를 모델이 채워야 한다고 판단해 그럴듯한 값을 생성
+6. **Faithfulness ≠ 정확도**: 문서 내 근거를 찾더라도 필드 경계 구분과 올바른 인스턴스 선택이 별도로 필요
+7. **Qwen3-VL-8B의 선전**: 오픈소스로 일부 클로즈드 모델 초과 — 아키텍처·학습 전략이 스케일보다 중요
 
 ---
 
@@ -158,31 +178,38 @@ Constrained 트랙은 실제 업무(세금신고, 의료기록, 영수증 등)�
 ```
 s = (F, R)
   F: 추출 대상 필드 집합
-  R: 필드 간 관계 (중첩, 포함 등 구조 관계)
+  R: 필드 간 관계 (그룹핑, 포함 등 계층 구조)
 
-y^SG = M(x, s)   ← 문서 이미지 x, 스키마 s → 구조화된 출력
+y^SG = M(x, s)   ← 문서 이미지 x + 스키마 s → 구조화된 JSON 출력
 ```
 
-### Open-Category 데이터 생성 파이프라인
+### Attention 레이어별 행동 (Appendix A.8)
 
-```
-1. 실제 문서 샘플에서 대표 예시 큐레이션
-2. LLM으로 문서 내용·레이아웃 설명 생성
-3. LLM으로 HTML 코드 생성 → 렌더링 → 문서 이미지
-4. Lightweight noise 추가 (시각적 실사성 강화)
-5. OCR로 텍스트 추출 → LMM으로 ground truth key-value 어노테이션
-```
+**필드명이 명시적인 경우** (Figure 8):
+- 얕은 레이어: 필드 레이블 위치에 집중 → 의미적 앵커 확립
+- 깊은 레이어: 레이블에서 대응 값 위치로 이동 → 추출 완료
+
+**필드명이 암묵적인 경우** (Figure 9):
+- 얕은 레이어: 의미적으로 관련된 후보 구문들에 분산
+- 깊은 레이어: 여러 후보 위치로 분산 유지 → 비교·추론을 통해 정답 선택
+
+### 평가 지표
+
+- **Sen.Acc**: 줄 단위 완전 일치 정확도
+- **F1**: 필드 단위 (exact match, character mismatch = 오답)
+- **Faithfulness Rate**: 예측값이 OCR 결과에 존재하는 비율 (환각 탐지)
 
 ---
 
 ## 📌 한계점
 
-1. **단일 페이지 한정**: 긴 문서 KIE 미포함 — 페이지 검색·크로스페이지 집계가 필요한 롱 문서는 별도 평가 인프라 필요
-2. **Context 길이 제약**: LMM의 컨텍스트 제약 때문에 롱 문서에서 내재적 KIE 능력 격리 어려움
-3. **평가 지표 한계**: Exact match F1 → 의미적으로 동등한 표현(날짜 포맷 등) 오답 처리
+1. **단일 페이지 한정**: 롱 문서 KIE 미포함 — 크로스페이지 집계 필요한 시나리오 제외
+2. **Context 길이 제약**: LMM 컨텍스트 제한으로 롱 문서에서의 내재적 능력 격리 어려움
+3. **Exact match 한계**: 날짜 포맷·단위 표기 등 의미적으로 동등한 표현을 오답 처리
+4. **합성 문서(Open Track)**: 실제 문서와 시각적으로 유사하지만 완전히 동일하지 않을 수 있음
 
 ---
 
 ## 🎓 결론
 
-UniKIE-BENCH는 스키마 가이드 단일 추론 방식으로 KIE를 통일해 LMM의 실질적 문서 이해 능력을 체계적으로 측정한다. 15개 모델 실험은 현재 LMM이 다양한 스키마·복잡 레이아웃·중국어 문서에서 뚜렷한 한계를 가짐을 보이며, 레이아웃 인식과 필드 의미 이해 강화가 향후 핵심 과제임을 제시한다.
+UniKIE-BENCH는 스키마 가이드 단일 추론 방식으로 KIE를 통일해 LMM의 실질적 문서 이해 능력을 체계적으로 측정한다. 필기체(HW-FORMS)를 포함한 다양한 문서 타입, 영/중 이중 언어, 6,133개 문서 규모로 기존 벤치마크의 한계를 극복한다. 15개 모델 실험은 현재 LMM이 복잡 레이아웃·중국어 문서·롱테일 필드에서 뚜렷한 한계를 가짐을 보이며, 레이아웃 인식과 필드 의미 이해 강화가 향후 핵심 과제임을 제시한다.
