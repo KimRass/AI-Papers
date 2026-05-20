@@ -282,6 +282,20 @@ Appendix A.8 "Behavioral Analysis for LMMs in KIE". Qwen3-VL-8B-Instruct를 대�
 
 ---
 
+**Q. Figure 6은 무슨 내용인가?**
+
+Appendix A.5 "Detailed Analysis of the Documents in the Open-Category KIE Track" — Layout Analysis.
+
+Open-Category 트랙 합성 문서들의 **레이아웃 다양성**을 시각화한 그림이다. 합성 문서에서 샘플링한 텍스트 영역의 정규화된 bounding box를 공유 좌표계에 겹쳐 표시하며, N은 겹쳐 표시하는 bounding box 수를 나타낸다.
+
+- **(a) N=50**: 이미 여러 수평 텍스트 줄과 다양한 위치의 블록 구조가 드러남
+- **(b) N=100**: 촘촘한 수평 밴드가 형성되며 줄 기반 레이아웃 패턴이 뚜렷해짐
+- **(c) N=300**: 전체 페이지 영역에 걸쳐 bounding box가 넓게 분포
+
+N이 커져도 **단일 지배적 템플릿으로 수렴하지 않음**이 핵심 — 합성 문서들이 획일적 레이아웃을 반복하지 않으며, 실제 문서에서 관찰되는 다양한 줄 기반 레이아웃 특성을 잘 반영한다는 검증 그림이다.
+
+---
+
 ## 🎓 결론
 
 UniKIE-BENCH는 스키마 가이드 단일 추론 방식으로 KIE를 통일해 LMM의 실질적 문서 이해 능력을 체계적으로 측정한다. 필기체(HW-FORMS)를 포함한 다양한 문서 타입, 영/중 이중 언어, 6,133개 문서 규모로 기존 벤치마크의 한계를 극복한다. 15개 모델 실험은 현재 LMM이 복잡 레이아웃·중국어 문서·롱테일 필드에서 뚜렷한 한계를 가짐을 보이며, 레이아웃 인식과 필드 의미 이해 강화가 향후 핵심 과제임을 제시한다.
