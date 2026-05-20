@@ -185,6 +185,27 @@ p_i = g_i(upsample(p_{i+1}) + c_i),   i = 4,3,2,1
 
 ---
 
+## ❓ Q&A
+
+**Q. 어디에 위치한 어떤 문자를 다른 문자로 대체할지 어떻게 컨트롤하는가?**
+
+두 가지 정보로 독립적으로 제어한다 (Section 3.1, 4.1).
+
+**어디에** → Polygon `P_ij`
+
+각 학습 샘플은 `(T_ij, P_ij)` 쌍으로 구성된다. `P_ij`는 4개의 꼭짓점으로 이루어진 사각형 polygon으로, 이미지에서 수정할 텍스트 영역의 위치를 지정한다. 이 polygon으로부터 binary mask `m`을 생성해 해당 영역만 inpainting 대상으로 지정한다.
+
+```
+x_m = x ⊙ (1 - m)          ← mask 영역을 0으로 처리 (기존 텍스트 제거)
+z̃_t = [z_t ; m ; E(x_m)]   ← latent에 mask와 masked image를 채널로 concat
+```
+
+**어떤 문자로** → Target text string `T_ij`
+
+`T_ij`는 원하는 새 텍스트 문자열이다. 이를 렌더링해 glyph 이미지로 변환하고, GlyphMastero로 처리해 conditioning embedding `c`를 생성한다. `c`가 UNet의 cross-attention을 통해 해당 mask 영역에 해당 글자를 생성하도록 가이드한다.
+
+---
+
 ## 🎓 결론
 
 GlyphMastero는 장면 텍스트 편집을 위한 전용 glyph 인코더로, 개별 글자의 로컬 획 정보와 줄 전체의 글로벌 구조 정보를 glyph attention으로 융합해 획 수준 정밀도의 가이던스를 생성한다. 특히 한자 같은 복잡한 문자 체계에서 기존 방법 대비 명확한 우위를 보이며, OCR 특징 직접 활용의 구조적 한계를 전용 학습 가이던스로 극복한 사례를 제시한다.

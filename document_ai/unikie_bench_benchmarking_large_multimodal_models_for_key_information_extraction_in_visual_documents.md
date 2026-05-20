@@ -210,6 +210,52 @@ y^SG = M(x, s)   ← 문서 이미지 x + 스키마 s → 구조화된 JSON 출�
 
 ---
 
+## ❓ Q&A
+
+**Q. 어떤 필드를 뽑으라는 지시를 어떻게 내렸는가?**
+
+Section 4 + Appendix A.6 (Figure 7). 프롬프트 템플릿에 JSON 스키마를 직접 삽입하는 방식이다.
+
+```
+<image>
+Suppose you are an information extraction expert.
+Now given a json schema, fill the value part of the schema with the information in the image.
+Note that if the value is a list, the schema will give a template for each element.
+Finally, only legal json is required as the output.
+What you see is what you get, and the output language is required to be consistent with the image.
+No explanation is required.
+Please output the results as required. The input json schema content is as follows:
+<schema>
+```
+
+필드명을 key로, 빈 문자열 `""`를 value로 채운 JSON 스키마를 넘기면 모델이 빈칸을 채운다. 필드 설명(description)은 의도적으로 제거해 모델이 필드명과 맥락만으로 의미를 추론하게 했다.
+
+---
+
+**Q. Constrained와 Open 트랙에서 필드 지시 방식이 어떻게 다른가?**
+
+Section 3.1 + Appendix A.4, A.6.
+
+**Constrained-Category**: 시나리오마다 공통으로 정의된 predefined 스키마를 사용한다. 같은 시나리오의 모든 문서에 동일한 필드 집합이 적용된다.
+
+```json
+// 예) Tax-Compliant 시나리오 — 모든 세금 문서에 동일한 키 적용
+{ "taxpayer_name": "", "tax_id": "", "filing_date": "", ... }
+```
+
+**Open-Category**: 문서마다 그 문서 고유의 스키마가 붙는다. 어노테이터가 각 문서를 보고 직접 설계한 것으로, 같은 Receipt라도 문서마다 필드가 달라질 수 있다.
+
+```json
+// 예) Figure 10 — 특정 영수증 한 장의 고유 스키마
+{ "receipt_number": "", "items": [{"subtotal": "", "unit_price": "",
+  "item_name": "", "quantity": ""}], "total": "",
+  "transaction_time": "", "store_address": "", "store_name": "" }
+```
+
+**공통점**: 두 트랙 모두 동일한 프롬프트 템플릿(Figure 7)에 스키마만 교체하는 방식이며, 필드 설명은 제공하지 않는다.
+
+---
+
 ## 🎓 결론
 
 UniKIE-BENCH는 스키마 가이드 단일 추론 방식으로 KIE를 통일해 LMM의 실질적 문서 이해 능력을 체계적으로 측정한다. 필기체(HW-FORMS)를 포함한 다양한 문서 타입, 영/중 이중 언어, 6,133개 문서 규모로 기존 벤치마크의 한계를 극복한다. 15개 모델 실험은 현재 LMM이 복잡 레이아웃·중국어 문서·롱테일 필드에서 뚜렷한 한계를 가짐을 보이며, 레이아웃 인식과 필드 의미 이해 강화가 향후 핵심 과제임을 제시한다.
